@@ -4,7 +4,7 @@ Description=Xray django telegram bot
 [Service]
 User=root
 WorkingDirectory=/root/x-django/
-ExecStart=/root/x-django/venv/bin/python manage.py startbot
+ExecStart=/root/x-django/.venv/bin/python manage.py startbot
 
 [Install]
 WantedBy=multi-user.target
