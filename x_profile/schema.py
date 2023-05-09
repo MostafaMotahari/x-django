@@ -7,7 +7,7 @@ INBOUND_SETTINGS ={
       "limitIp": 0,
       "totalGB": 10737418240,
       "expiryTime": 0,
-      "enable": true,
+      "enable": True,
       "tgId": "MurixXx",
       "subId": ""
     }
@@ -20,7 +20,7 @@ STREAM_SETTINGS = {
   "network": "tcp",
   "security": "reality",
   "realitySettings": {
-    "show": false,
+    "show": False,
     "xver": 0,
     "dest": "discord.com:443",
     "serverNames": [
@@ -40,7 +40,7 @@ STREAM_SETTINGS = {
     }
   },
   "tcpSettings": {
-    "acceptProxyProtocol": false,
+    "acceptProxyProtocol": False,
     "header": {
       "type": "none"
     }
@@ -48,7 +48,7 @@ STREAM_SETTINGS = {
 }
 
 SNIFFING_SETTINGS = {
-  "enabled": true,
+  "enabled": True,
   "destOverride": [
     "http",
     "tls",
