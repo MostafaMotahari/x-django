@@ -5,7 +5,7 @@ from pyrogram import filters
 from pyrogram.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton
 from pyrogram.errors import UserNotParticipant
 
-from x_profile import models
+from x_bot import models
 
 @Client.on_message(filters.private & filters.command('start'))
 def start(client, message, started=True):

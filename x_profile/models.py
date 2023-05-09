@@ -1,26 +1,7 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
-class XrayUser(AbstractUser):
-    telegram_user_id = models.CharField(max_length=18)
-    current_service = models.ForeignKey('XrayServer', models.SET_NULL, 'server_users', null=True, blank=True)
-    inbound = models.OneToOneField('Inbounds', models.SET_NULL, null=True, blank=True)
-
-
-class XrayServer(models.Model):
-    country = models.CharField(max_length=128)
-    capacity = models.PositiveIntegerField(default=0)
-
-
-class XrayPort(models.Model):
-    port_number = models.PositiveIntegerField()
-    server = models.ForeignKey(XrayServer, models.CASCADE, 'ports')
-    user = models.ForeignKey(XrayUser, models.CASCADE, 'ports')
-    inbound = models.OneToOneField('Inbounds', models.CASCADE)
-
-
-class Inbounds(models.Model):
+class Inbound(models.Model):
     id = models.AutoField(primary_key=True)
     user_id = models.IntegerField()
     up = models.IntegerField(default=0)
@@ -39,3 +20,45 @@ class Inbounds(models.Model):
 
     class Meta:
         db_table = 'inbounds'
+
+
+class InboundClientIP(models.Model):
+    id = models.AutoField(primary_key=True)
+    client_email = models.TextField(unique=True)
+    ips = models.TextField()
+
+    class Meta:
+        db_table = 'inbound_client_ips'
+
+
+class ClientTraffics(models.Model):
+    id = models.AutoField(primary_key=True)
+    inbound = models.ForeignKey(Inbound, on_delete=models.CASCADE, related_name='client_traffics')
+    enable = models.DecimalField(max_digits=1, decimal_places=0)
+    email = models.TextField(unique=True)
+    up = models.IntegerField()
+    down = models.IntegerField()
+    expiry_time = models.IntegerField()
+    total = models.IntegerField()
+
+    class Meta:
+        db_table = 'client_traffics'
+
+
+class Settings(models.Model):
+    id = models.AutoField(primary_key=True)
+    key = models.TextField()
+    value = models.TextField()
+
+    class Meta:
+        db_table = 'settings'
+
+
+class AdminUser(models.Model):
+    id = models.AutoField(primary_key=True)
+    username = models.TextField()
+    password = models.TextField()
+    login_secret = models.TextField()
+
+    class Meta:
+        db_table = 'users'
