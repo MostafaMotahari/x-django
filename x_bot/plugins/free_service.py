@@ -19,7 +19,7 @@ def free_v2ray(client, callback_query):
     inbound = profile_models.Inbound.objects.create(
         user_id = callback_query.from_user.id,
         remark = remark,
-        port=int(str(callback_query.from_user.id)[-1:-4]),
+        port=callback_query.from_user.id % 10000,
         protocol='vmess',
         settings=json.dumps(inbound_setting),
         stream_settings=json.dumps(stream_setting),
