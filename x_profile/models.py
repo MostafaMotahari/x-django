@@ -5,7 +5,7 @@ from django.contrib.auth.models import AbstractUser
 class XrayUser(AbstractUser):
     telegram_user_id = models.CharField(max_length=18)
     current_service = models.ForeignKey('XrayServer', models.SET_NULL, 'server_users', null=True, blank=True)
-    inbound = models.OneToOneField('Inbounds', models.SET_NULL, 'user', null=True, blank=True)
+    inbound = models.OneToOneField('Inbounds', models.SET_NULL, null=True, blank=True)
 
 
 class XrayServer(models.Model):
@@ -17,7 +17,7 @@ class XrayPort(models.Model):
     port_number = models.PositiveIntegerField()
     server = models.ForeignKey(XrayServer, models.CASCADE, 'ports')
     user = models.ForeignKey(XrayUser, models.CASCADE, 'ports')
-    inbound = models.OneToOneField('Inbounds', models.CASCADE, 'related_port')
+    inbound = models.OneToOneField('Inbounds', models.CASCADE)
 
 
 class Inbounds(models.Model):
