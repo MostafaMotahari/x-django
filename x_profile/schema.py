@@ -1,25 +1,22 @@
-INBOUND_SETTINGS = '''
-{
+INBOUND_SETTINGS ={
   "clients": [
     {
-      "id": "{uuid}",
+      "id": "9f5abda8-7a85-4f6a-e05b-8d4b37c53799",
       "flow": "xtls-rprx-vision",
       "email": "",
       "limitIp": 0,
       "totalGB": 10737418240,
-      "expiryTime": {expiry_time},
+      "expiryTime": 0,
       "enable": true,
-      "tgId": "{tag}",
+      "tgId": "MurixXx",
       "subId": ""
     }
   ],
   "decryption": "none",
   "fallbacks": []
 }
-'''
 
-STREAM_SETTINGS = '''
-{
+STREAM_SETTINGS = {
   "network": "tcp",
   "security": "reality",
   "realitySettings": {
@@ -49,10 +46,8 @@ STREAM_SETTINGS = '''
     }
   }
 }
-'''
 
-SNIFFING_SETTINGS = '''
-{
+SNIFFING_SETTINGS = {
   "enabled": true,
   "destOverride": [
     "http",
@@ -60,4 +55,3 @@ SNIFFING_SETTINGS = '''
     "quic"
   ]
 }
-'''
