@@ -13,8 +13,8 @@ def free_v2ray(client, callback_query):
     stream_setting = schema.STREAM_SETTINGS
     sniffing_setting = schema.SNIFFING_SETTINGS
     inbound_setting = schema.INBOUND_SETTINGS
-    inbound_setting['client']['id'] = "12"
-    inbound_setting['client']['tagId'] = remark
+    inbound_setting['clients'][0]['id'] = "12"
+    inbound_setting['clients'][0]['tagId'] = remark
 
     inbound = profile_models.Inbound.objects.create(
         user_id = callback_query.from_user.id,
