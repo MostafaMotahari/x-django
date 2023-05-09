@@ -9,8 +9,7 @@ from x_bot import models
 
 @Client.on_message(filters.private & filters.command('start'))
 def start(client, message, started=True):
-    user, is_created = models.XrayUser.objects.get_or_create(telegram_user_id=message.from_user.id, 
-                                        defaults={'username': message.from_user.username})
+    user, is_created = models.XrayUser.objects.get_or_create(telegram_user_id=message.from_user.id)
     try:
         is_channel_memeber = True if client.get_chat_member(settings.MAIN_TELEGRAM_CHANNEL, message.from_user.id) else False
     except UserNotParticipant:
