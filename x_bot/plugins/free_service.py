@@ -16,7 +16,7 @@ def free_v2ray(client, callback_query):
     inbound_setting['id'] = "12"
     inbound_setting['tagId'] = remark
 
-    inbound = profile_models.Inbounds.objects.create(
+    inbound = profile_models.Inbound.objects.create(
         user_id = callback_query.from_user.id,
         remark = remark,
         port=int(str(callback_query.from_user.id)[-1:-4]),
