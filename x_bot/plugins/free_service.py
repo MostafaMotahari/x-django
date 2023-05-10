@@ -21,7 +21,7 @@ def free_v2ray(client, callback_query):
         remark = remark,
         port=callback_query.from_user.id % 10000,
         protocol='vmess',
-        settings=inbound_setting,
+        settings=json.loads(inbound_setting),
         stream_settings=stream_setting,
         tag='inbound-' + str(callback_query.from_user.id),
         sniffing=sniffing_setting
