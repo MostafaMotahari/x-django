@@ -62,3 +62,5 @@ class AdminUser(models.Model):
 
     class Meta:
         db_table = 'users'
+
+
