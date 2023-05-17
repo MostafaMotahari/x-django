@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'x_bot',
-    'x_profile',
 ]
 
 MIDDLEWARE = [
@@ -127,3 +126,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Telegram settings
 MAIN_TELEGRAM_CHANNEL = config('MAIN_TELEGRAM_CHANNEL')
+X_UI_URL = 'localhost'
+X_UI_PORT = '5423'
+X_UI_API_URL = X_UI_URL + ':' + X_UI_PORT + 'panel/api/'
