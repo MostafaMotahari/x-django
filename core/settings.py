@@ -127,6 +127,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Telegram settings
 MAIN_TELEGRAM_CHANNEL = config('MAIN_TELEGRAM_CHANNEL')
-X_UI_URL = '0.0.0.0'
-X_UI_PORT = '5423'
-X_UI_API_URL = X_UI_URL + ':' + X_UI_PORT + '/panel/api/'
+X_UI_URL = 'http://localhost:5423'
+X_UI_API_URL = X_UI_URL + '/panel/api/'

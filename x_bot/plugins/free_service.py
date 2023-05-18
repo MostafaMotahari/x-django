@@ -9,6 +9,9 @@ from x_bot.plugins.functions import get_uuid, get_keys
 
 @Client.on_callback_query(filters.regex("^free_(.*)$"))
 def free_v2ray(client, callback_query):
+    login = requests.request("POST", settings.X_UI_URL + 'login', headers={}, data='username=mousiol&password=123')
+    print(login.text)
+
     remark = str(callback_query.from_user.id) + '-' + callback_query.data.split("_")[-1]
     pub_key, pri_key = get_keys()
     stream_settings =  '{"network": "tcp", "security": "reality", "realitySettings": {"show": False, "xver": 0, "dest": "yahoo.com:443", "serverNames": ["yahoo.com", "www.yahoo.com"], "privateKey": "%s", "minClient": "", "maxClient": "", "maxTimediff": 0, "shortIds": [], "settings": {"publicKey": "%s", "fingerprint": "firefox", "serverName": ""}}, "tcpSettings": {"acceptProxyProtocol": False, "header": {"type": "none"}}}'
