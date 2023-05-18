@@ -4,9 +4,8 @@ from django.conf import settings
 import json
 import requests
 
-from x_bot.filters.custom_filters import force_join_filter
 from x_bot.plugins.functions import get_uuid, get_keys
-
+ 
 
 @Client.on_callback_query(filters.regex("^free_(.*)$"))
 def free_v2ray(client, callback_query):
@@ -29,6 +28,7 @@ def free_v2ray(client, callback_query):
     headers = {
         'Accept': 'application/json'
     }
+    print(payload)
 
     response = requests.request("POST", settings.X_UI_API_URL + 'inbounds/add', headers=headers, data=json.dumps(payload))
     json_response = response.json()
@@ -36,11 +36,11 @@ def free_v2ray(client, callback_query):
 
     if json_response['success']:
         uuid = get_uuid()
-        settings =  '{"clients":[{"id":"%s","alterId":0,"email":"%s","limitIp":2,"totalGB":10,"expiryTime":1682864675944,"enable":true,"tgId":"","subId":""}]}'
+        v2ray_settings =  '{"clients":[{"id":"%s","alterId":0,"email":"%s","limitIp":2,"totalGB":10,"expiryTime":1682864675944,"enable":true,"tgId":"","subId":""}]}'
 
         payload = {
             'id': json_response['obj']['id'],
-            'settings': settings % (uuid, remark + " Email")
+            'settings': v2ray_settings % (uuid, remark + " Email")
         }
 
         response = requests.request("POST", settings.X_UI_API_URL + 'inbounds/addClient', headers=headers, data=json.dumps(payload))
