@@ -9,7 +9,7 @@ from x_bot.plugins.functions import get_uuid, get_keys
 
 @Client.on_callback_query(filters.regex("^free_(.*)$"))
 def free_v2ray(client, callback_query):
-    login = requests.request("POST", settings.X_UI_URL + '/login', headers={}, data={
+    login = requests.request("POST", settings.XUI_URL + '/login', headers={}, data={
         "username": settings.XUI_USER,
         "password": settings.XUI_PASS
     })
