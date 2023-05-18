@@ -61,10 +61,8 @@ def free_v2ray(client, callback_query):
     }
     headers = {'Accept': 'application/json'}
 
-    print(json.dumps(payload))
-
     response = requests.request("POST", settings.XUI_API_URL + 'inbounds/add',
-                                headers=headers, data=json.dumps(payload), cookies=login.cookies)
+                                headers=headers, data=payload, cookies=login.cookies)
     json_response = response.json()
 
     if json_response['success']:
@@ -83,12 +81,15 @@ def free_v2ray(client, callback_query):
             }]
         }
 
-        payload = {
+        client_payload = {
             'id': json_response['obj']['id'],
             'settings': json.dumps(v2ray_settings)
         }
 
         response = requests.request("POST", settings.XUI_API_URL + 'inbounds/addClient',
-                                    headers=headers, data=json.dumps(payload), cookies=login.cookies)
+                                    headers=headers, data=client_payload, cookies=login.cookies)
+        print(response.json())
+    else:
+        print("No")
 
     client.send_message(callback_query.chat.id, 'Created')
