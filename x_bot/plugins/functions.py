@@ -1,9 +1,28 @@
 import subprocess
 import qrcode
+import shortuuid
+
+from x_bot.models import XrayService
 
 def get_uuid():
-    result = subprocess.run(['xray', 'uuid'], stdout=subprocess.PIPE)
-    return result.stdout.decode('utf-8').strip()
+    while True:
+        result = subprocess.run(['xray', 'uuid'], stdout=subprocess.PIPE)
+        result = result.stdout.decode('utf-8').strip()
+        try:
+            XrayService.objects.get(uuid=result)
+            continue
+        except XrayService.DoesNotExist:
+            break
+
+    while True:
+        short_uuid = shortuuid.uuid()
+        try:
+            XrayService.objects.get(short_uuid=short_uuid)
+            continue
+        except XrayService.DoesNotExist:
+            break
+
+    return (result, short_uuid)
 
 def get_keys():
     result = subprocess.run(['xray', 'x25519'], stdout=subprocess.PIPE)

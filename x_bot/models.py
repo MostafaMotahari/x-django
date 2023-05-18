@@ -14,6 +14,8 @@ class XrayServer(models.Model):
 class XrayService(models.Model):
     user = models.ForeignKey(XrayUser, models.CASCADE, 'current_services')
     server = models.OneToOneField(XrayServer, models.SET_NULL, null=True, blank=True)
+    uuid = models.CharField(max_length=32, unique=True)
+    short_uuid = models.CharField(max_length=32, unique=True)
     price = models.IntegerField(default=0)
     connection_code = models.CharField(max_length=526)
     connection_qr = models.CharField(max_length=128)
