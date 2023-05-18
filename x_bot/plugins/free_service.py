@@ -18,7 +18,7 @@ def free_v2ray(client, callback_query):
         client.send_message(callback_query.message.chat.id, 'You currently have a free service!')
         return False
 
-    except models.XrayServer.DoesNotExist:
+    except models.XrayService.DoesNotExist:
         pass
 
     login = requests.request("POST", settings.XUI_URL + '/login', headers={}, data={
