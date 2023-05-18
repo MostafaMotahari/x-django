@@ -19,24 +19,25 @@ def free_v2ray(client, callback_query):
     stream_settings =  '{"network": "tcp", "security": "reality", "realitySettings": {"show": False, "xver": 0, "dest": "yahoo.com:443", "serverNames": ["yahoo.com", "www.yahoo.com"], "privateKey": "%s", "minClient": "", "maxClient": "", "maxTimediff": 0, "shortIds": [], "settings": {"publicKey": "%s", "fingerprint": "firefox", "serverName": ""}}, "tcpSettings": {"acceptProxyProtocol": False, "header": {"type": "none"}}}'
 
     payload = {
-        'enable': True,
-        'remark': remark,
-        'listen': '',
-        'port': 48965,
-        'protocol': 'vless',
-        'expiryTime': 0,
-        'settings':
-        '{"clients":[],"decryption":"none","fallbacks":[]}',
-        'streamSettings': stream_settings % (pri_key, pub_key),
-        'sniffing': '{"enabled":true,"destOverride":["http","tls","quic"]}'
+        "enable": True,
+        "remark": remark,
+        "listen": '',
+        "port": 48965,
+        "protocol": "vless",
+        "expiryTime": 0,
+        "settings": '{"clients":[],"decryption":"none","fallbacks":[]}',
+        "streamSettings": stream_settings % (pri_key, pub_key),
+        "sniffing": '{"enabled":true,"destOverride":["http","tls","quic"]}'
     }
     headers = {
         'Accept': 'application/json'
     }
 
-    response = requests.request("POST", settings.XUI_API_URL + 'inbounds/add', headers=headers, data=json.dumps(payload))
+    print(payload)
+
+    response = requests.request("POST", settings.XUI_API_URL + 'inbounds/add',
+                                headers=headers, data=json.dumps(payload), cookies=login.cookies)
     json_response = response.json()
-    print(json_response)
 
     if json_response['success']:
         uuid = get_uuid()
@@ -47,6 +48,7 @@ def free_v2ray(client, callback_query):
             'settings': v2ray_settings % (uuid, remark + " Email")
         }
 
-        response = requests.request("POST", settings.XUI_API_URL + 'inbounds/addClient', headers=headers, data=json.dumps(payload))
+        response = requests.request("POST", settings.XUI_API_URL + 'inbounds/addClient',
+                                    headers=headers, data=json.dumps(payload), cookies=login.cookies)
 
     client.send_message(callback_query.chat.id, 'Created')
