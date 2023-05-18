@@ -27,6 +27,7 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = True
 
 ALLOWED_HOSTS = ['localhost']
+REGISTERED_DOMAIN = 'localhost'
 
 
 # Application definition
