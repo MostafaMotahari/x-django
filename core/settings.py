@@ -26,7 +26,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost']
+ALLOWED_HOSTS = ['localhost', '*']
 REGISTERED_DOMAIN = 'localhost'
 
 
@@ -128,7 +128,3 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Telegram settings
 MAIN_TELEGRAM_CHANNEL = config('MAIN_TELEGRAM_CHANNEL')
-XUI_URL = 'http://localhost:5423'
-XUI_API_URL = XUI_URL + '/panel/api/'
-XUI_USER = config('XUI_USER')
-XUI_PASS = config('XUI_PASS')

@@ -12,6 +12,7 @@ from x_bot import models
 @Client.on_callback_query(filters.regex("^free_(.*)$"))
 def free_v2ray(client, callback_query):
     user = models.XrayUser.objects.get(telegram_user_id=callback_query.from_user.id)
+    server = models.XrayServer.objects.get(country=callback_query.data.split("_")[-1])
 
     try:
         current_service = models.XrayService.objects.get(user=user, price=0)
@@ -21,12 +22,11 @@ def free_v2ray(client, callback_query):
     except models.XrayService.DoesNotExist:
         pass
 
-    login = requests.request("POST", settings.XUI_URL + '/login', headers={}, data={
-        "username": settings.XUI_USER,
-        "password": settings.XUI_PASS
+    login = requests.request("POST", server.xui_root_url + '/login', headers={}, data={
+        "username": server.xui_username,
+        "password": server.xui_password
     })
 
-    server = models.XrayServer.objects.get(country=callback_query.data.split("_")[-1])
     remark = str(callback_query.from_user.id) + '-' + server.country
     uuid, short_uuid = functions.get_uuid()
     pub_key, pri_key = functions.get_keys()
@@ -52,7 +52,7 @@ def free_v2ray(client, callback_query):
     }
     headers = {'Accept': 'application/json'}
 
-    response = requests.request("POST", settings.XUI_API_URL + 'inbounds/add',
+    response = requests.request("POST", server.xui_api_url + 'inbounds/add',
                                 headers=headers, data=payload, cookies=login.cookies)
     inbound_json = response.json()
 
@@ -62,7 +62,7 @@ def free_v2ray(client, callback_query):
             'settings': functions.get_client(remark, uuid)
         }
 
-        response = requests.request("POST", settings.XUI_API_URL + 'inbounds/addClient',
+        response = requests.request("POST", server.xui_api_url + 'inbounds/addClient',
                                     headers=headers, data=client_payload, cookies=login.cookies)
         json_response = response.json()
 
