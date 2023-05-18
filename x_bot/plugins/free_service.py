@@ -9,8 +9,10 @@ from x_bot.plugins.functions import get_uuid, get_keys
 
 @Client.on_callback_query(filters.regex("^free_(.*)$"))
 def free_v2ray(client, callback_query):
-    login = requests.request("POST", settings.X_UI_URL + 'login', headers={}, data='username=mousiol&password=123')
-    print(login.text)
+    login = requests.request("POST", settings.X_UI_URL + '/login', headers={}, data={
+        "username": settings.XUI_USER,
+        "password": settings.XUI_PASS
+    })
 
     remark = str(callback_query.from_user.id) + '-' + callback_query.data.split("_")[-1]
     pub_key, pri_key = get_keys()
@@ -31,9 +33,8 @@ def free_v2ray(client, callback_query):
     headers = {
         'Accept': 'application/json'
     }
-    print(payload)
 
-    response = requests.request("POST", settings.X_UI_API_URL + 'inbounds/add', headers=headers, data=json.dumps(payload))
+    response = requests.request("POST", settings.XUI_API_URL + 'inbounds/add', headers=headers, data=json.dumps(payload))
     json_response = response.json()
     print(json_response)
 
@@ -46,6 +47,6 @@ def free_v2ray(client, callback_query):
             'settings': v2ray_settings % (uuid, remark + " Email")
         }
 
-        response = requests.request("POST", settings.X_UI_API_URL + 'inbounds/addClient', headers=headers, data=json.dumps(payload))
+        response = requests.request("POST", settings.XUI_API_URL + 'inbounds/addClient', headers=headers, data=json.dumps(payload))
 
     client.send_message(callback_query.chat.id, 'Created')
