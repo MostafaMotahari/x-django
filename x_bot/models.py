@@ -23,11 +23,11 @@ class XrayServer(models.Model):
 
     @property
     def xui_api_url(self):
-        return self.domain + ':' + str(self.xui_port) + '/panel/api/'
+        return 'http://' + self.domain + ':' + str(self.xui_port) + '/panel/api/'
 
     @property
     def xui_root_url(self):
-        return self.domain + ':' + str(self.xui_port)
+        return 'http://' + self.domain + ':' + str(self.xui_port)
 
 
 class XrayService(models.Model):

@@ -63,7 +63,7 @@ def get_stream_settings(pub_key, pri_key, short_uuid, server_name):
             "show": False,
             "xver": 0,
             "dest": server_name + ":443",
-            "serverNames": [server_name, "www" + server_name],
+            "serverNames": [server_name, "www." + server_name],
             "privateKey": pri_key,
             "minClient": "",
             "maxClient": "",
@@ -84,7 +84,7 @@ def get_stream_settings(pub_key, pri_key, short_uuid, server_name):
 
     return json.dumps(stream_settings)
 
-def get_client(remark, uuid, limit_ip=2, total_gb=10, expiry_time=1682864675944):
+def get_client(remark, uuid, limit_ip=2, total_gb=20, expiry_time=1682864675944):
     client = {
         "clients":[{
             "id": uuid,
