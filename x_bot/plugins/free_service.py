@@ -16,7 +16,30 @@ def free_v2ray(client, callback_query):
 
     remark = str(callback_query.from_user.id) + '-' + callback_query.data.split("_")[-1]
     pub_key, pri_key = get_keys()
-    stream_settings =  '{"network": "tcp", "security": "reality", "realitySettings": {"show": False, "xver": 0, "dest": "yahoo.com:443", "serverNames": ["yahoo.com", "www.yahoo.com"], "privateKey": "%s", "minClient": "", "maxClient": "", "maxTimediff": 0, "shortIds": [], "settings": {"publicKey": "%s", "fingerprint": "firefox", "serverName": ""}}, "tcpSettings": {"acceptProxyProtocol": False, "header": {"type": "none"}}}'
+    stream_settings = {
+        "network": "tcp",
+        "security": "reality",
+        "realitySettings": {
+            "show": False,
+            "xver": 0,
+            "dest": "yahoo.com:443",
+            "serverNames": ["yahoo.com", "www.yahoo.com"],
+            "privateKey": pri_key,
+            "minClient": "",
+            "maxClient": "",
+            "maxTimediff": 0,
+            "shortIds": [],
+            "settings": {
+                "publicKey": pub_key,
+                "fingerprint": "firefox",
+                "serverName": ""
+            }
+        },
+        "tcpSettings": {
+            "acceptProxyProtocol": False,
+            "header": {"type": "none"}
+        }
+    }
 
     payload = {
         "enable": True,
@@ -25,15 +48,22 @@ def free_v2ray(client, callback_query):
         "port": 48965,
         "protocol": "vless",
         "expiryTime": 0,
-        "settings": '{"clients":[],"decryption":"none","fallbacks":[]}',
-        "streamSettings": stream_settings % (pri_key, pub_key),
-        "sniffing": '{"enabled":true,"destOverride":["http","tls","quic"]}'
+        "settings": {
+            "clients":[],
+            "decryption":"none",
+            "fallbacks":[]
+        },
+        "streamSettings": stream_settings,
+        "sniffing": {
+            "enabled":True,
+            "destOverride":["http","tls","quic"]
+        }
     }
     headers = {
         'Accept': 'application/json'
     }
 
-    print(payload)
+    print(json.dumps(payload))
 
     response = requests.request("POST", settings.XUI_API_URL + 'inbounds/add',
                                 headers=headers, data=json.dumps(payload), cookies=login.cookies)
