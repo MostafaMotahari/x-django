@@ -5,7 +5,7 @@ import json
 import requests
 import shortuuid
 
-from x_bot.plugins.functions import get_uuid, get_keys, make_qr_image
+from x_bot.plugins import functions
 from x_bot import models
  
 
@@ -28,43 +28,9 @@ def free_v2ray(client, callback_query):
 
     server = models.XrayServer.objects.get(country=callback_query.data.split("_")[-1])
     remark = str(callback_query.from_user.id) + '-' + server.country
-    uuid, short_uuid = get_uuid()
-    pub_key, pri_key = get_keys()
-
-    stream_settings = {
-        "network": "tcp",
-        "security": "reality",
-        "realitySettings": {
-            "show": False,
-            "xver": 0,
-            "dest": "yahoo.com:443",
-            "serverNames": ["yahoo.com", "www.yahoo.com"],
-            "privateKey": pri_key,
-            "minClient": "",
-            "maxClient": "",
-            "maxTimediff": 0,
-            "shortIds": [short_uuid],
-            "spiderX": "/",
-            "settings": {
-                "publicKey": pub_key,
-                "fingerprint": "firefox",
-                "serverName": ""
-            }
-        },
-        "tcpSettings": {
-            "acceptProxyProtocol": False,
-            "header": {"type": "none"}
-        }
-    }
-
-    port = None
-    for port in range(10000, 12000):
-        try:
-            models.XrayPort.objects.get(port_number=port)
-            continue
-        except models.XrayPort.DoesNotExist:
-            port = port
-            break
+    uuid, short_uuid = functions.get_uuid()
+    pub_key, pri_key = functions.get_keys()
+    port = functions.get_port()
 
     payload = {
         "enable": True,
@@ -78,7 +44,7 @@ def free_v2ray(client, callback_query):
             "decryption": "none",
             "fallbacks": []
         }),
-        "streamSettings": json.dumps(stream_settings),
+        "streamSettings": functions.get_stream_settings(pub_key, pri_key, short_uuid, server.sni),
         "sniffing": json.dumps({
             "enabled": True,
             "destOverride": ["http","tls","quic"]
@@ -91,24 +57,9 @@ def free_v2ray(client, callback_query):
     inbound_json = response.json()
 
     if inbound_json['success']:
-        v2ray_settings = {
-            "clients":[{
-                "id": uuid,
-                "alterId": 0,
-                "email": remark + "-Email",
-                "limitIp": 2,
-                "totalGB": 10,
-                "expiryTime": 1682864675944,
-                "enable": True,
-                "flow": "xtls-rprx-vision",
-                "tgId": "",
-                "subId": ""
-            }]
-        }
-
         client_payload = {
             'id': inbound_json['obj']['id'],
-            'settings': json.dumps(v2ray_settings)
+            'settings': functions.get_client(remark, uuid)
         }
 
         response = requests.request("POST", settings.XUI_API_URL + 'inbounds/addClient',
@@ -116,8 +67,8 @@ def free_v2ray(client, callback_query):
         json_response = response.json()
 
         if json_response['success']:
-            conn_str = f"vless://{uuid}@{settings.REGISTERED_DOMAIN}:{payload['port']}?type=tcp&security=reality&fp={stream_settings['realitySettings']['settings']['fingerprint']}&pbk={pub_key}&sni={stream_settings['realitySettings']['serverNames'][0]}&flow=xtls-rprx-vision&sid={short_uuid}&spx=%2F#{remark}-{remark + '-Email'}"
-            image_path = make_qr_image(conn_str, remark)
+            conn_str = f"{payload['protocol']}://{uuid}@{server.domain}:{port}?type=tcp&security=reality&fp=firefox&pbk={pub_key}&sni={server.sni}&flow=xtls-rprx-vision&sid={short_uuid}&spx=%2F#{remark}-{remark + '-Email'}"
+            image_path = functions.make_qr_image(conn_str, remark)
 
             models.XrayService.objects.create(
                     user=user, connection_code=conn_str, connection_qr=image_path,

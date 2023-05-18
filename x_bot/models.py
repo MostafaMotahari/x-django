@@ -9,6 +9,8 @@ class XrayServer(models.Model):
     country = models.CharField(max_length=128, unique=True)
     capacity = models.PositiveIntegerField(default=0)
     is_active = models.BooleanField(default=True)
+    sni = models.CharField(max_length=32)
+    domain = models.CharField(max_length=32)
 
 
 class XrayService(models.Model):

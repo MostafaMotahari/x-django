@@ -1,8 +1,9 @@
 import subprocess
 import qrcode
 import shortuuid
+import json
 
-from x_bot.models import XrayService
+from x_bot.models import XrayService, XrayPort
 
 def get_uuid():
     while True:
@@ -44,3 +45,59 @@ def make_qr_image(data: str, file_name: str):
     # qr_image = qr.make_image(fill_color="black", back_color="white")
     image.save(f"qr_codes/{file_name}.png")
     return f"qr_codes/{file_name}.png"
+
+def get_port():
+    port = None
+    for port in range(10000, 12000):
+        try:
+            XrayPort.objects.get(port_number=port)
+            continue
+        except XrayPort.DoesNotExist:
+            return port
+
+def get_stream_settings(pub_key, pri_key, short_uuid, server_name):
+    stream_settings = {
+        "network": "tcp",
+        "security": "reality",
+        "realitySettings": {
+            "show": False,
+            "xver": 0,
+            "dest": server_name + ":443",
+            "serverNames": [server_name, "www" + server_name],
+            "privateKey": pri_key,
+            "minClient": "",
+            "maxClient": "",
+            "maxTimediff": 0,
+            "shortIds": [short_uuid],
+            "settings": {
+                "publicKey": pub_key,
+                "fingerprint": "firefox",
+                "serverName": "",
+                "spiderX": "/"
+            }
+        },
+        "tcpSettings": {
+            "acceptProxyProtocol": False,
+            "header": {"type": "none"}
+        }
+    }
+
+    return json.dumps(stream_settings)
+
+def get_client(remark, uuid, limit_ip=2, total_gb=10, expiry_time=1682864675944):
+    client = {
+        "clients":[{
+            "id": uuid,
+            "alterId": 0,
+            "email": remark + "-Email",
+            "limitIp": limit_ip,
+            "totalGB": total_gb,
+            "expiryTime": expiry_time,
+            "enable": True,
+            "flow": "xtls-rprx-vision",
+            "tgId": "",
+            "subId": ""
+        }]
+    }
+
+    return json.dumps(client)
