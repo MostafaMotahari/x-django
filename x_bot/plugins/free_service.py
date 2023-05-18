@@ -48,20 +48,18 @@ def free_v2ray(client, callback_query):
         "port": 48965,
         "protocol": "vless",
         "expiryTime": 0,
-        "settings": {
-            "clients":[],
-            "decryption":"none",
-            "fallbacks":[]
-        },
-        "streamSettings": stream_settings,
-        "sniffing": {
-            "enabled":True,
-            "destOverride":["http","tls","quic"]
-        }
+        "settings": json.dumps({
+            "clients": [],
+            "decryption": "none",
+            "fallbacks": []
+        }),
+        "streamSettings": json.dumps(stream_settings),
+        "sniffing": json.dumps({
+            "enabled": True,
+            "destOverride": ["http","tls","quic"]
+        })
     }
-    headers = {
-        'Accept': 'application/json'
-    }
+    headers = {'Accept': 'application/json'}
 
     print(json.dumps(payload))
 
@@ -71,11 +69,23 @@ def free_v2ray(client, callback_query):
 
     if json_response['success']:
         uuid = get_uuid()
-        v2ray_settings =  '{"clients":[{"id":"%s","alterId":0,"email":"%s","limitIp":2,"totalGB":10,"expiryTime":1682864675944,"enable":true,"tgId":"","subId":""}]}'
+        v2ray_settings = {
+            "clients":[{
+                "id": uuid,
+                "alterId": 0,
+                "email": remark + " Email",
+                "limitIp": 2,
+                "totalGB": 10,
+                "expiryTime": 1682864675944,
+                "enable": True,
+                "tgId": "",
+                "subId": ""
+            }]
+        }
 
         payload = {
             'id': json_response['obj']['id'],
-            'settings': v2ray_settings % (uuid, remark + " Email")
+            'settings': json.dumps(v2ray_settings)
         }
 
         response = requests.request("POST", settings.XUI_API_URL + 'inbounds/addClient',
