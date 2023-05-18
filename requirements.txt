@@ -2,7 +2,10 @@ asgiref==3.6.0
 decouple==0.0.7
 Django==4.2.1
 pyaes==1.6.1
+pypng==0.20220715.0
 Pyrogram==2.0.106
 PySocks==1.7.1
+qrcode==7.4.2
 sqlparse==0.4.4
 TgCrypto==1.2.5
+typing_extensions==4.5.0

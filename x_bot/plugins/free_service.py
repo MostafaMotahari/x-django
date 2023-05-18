@@ -4,7 +4,7 @@ from django.conf import settings
 import json
 import requests
 
-from x_bot.plugins.functions import get_uuid, get_keys
+from x_bot.plugins.functions import get_uuid, get_keys, make_qr_image
  
 
 @Client.on_callback_query(filters.regex("^free_(.*)$"))
@@ -63,15 +63,15 @@ def free_v2ray(client, callback_query):
 
     response = requests.request("POST", settings.XUI_API_URL + 'inbounds/add',
                                 headers=headers, data=payload, cookies=login.cookies)
-    json_response = response.json()
+    inbound_json = response.json()
 
-    if json_response['success']:
+    if inbound_json['success']:
         uuid = get_uuid()
         v2ray_settings = {
             "clients":[{
                 "id": uuid,
                 "alterId": 0,
-                "email": remark + " Email",
+                "email": remark + "-Email",
                 "limitIp": 2,
                 "totalGB": 10,
                 "expiryTime": 1682864675944,
@@ -82,14 +82,18 @@ def free_v2ray(client, callback_query):
         }
 
         client_payload = {
-            'id': json_response['obj']['id'],
+            'id': inbound_json['obj']['id'],
             'settings': json.dumps(v2ray_settings)
         }
 
         response = requests.request("POST", settings.XUI_API_URL + 'inbounds/addClient',
                                     headers=headers, data=client_payload, cookies=login.cookies)
-        print(response.json())
-    else:
-        print("No")
+        json_response = response.json()
 
-    client.send_message(callback_query.chat.id, 'Created')
+        if json_response['success']:
+            conn_str = f"vless://{uuid}@domain:{payload['port']}?type=tcp&security=reality&fp={stream_settings['realitySettings']['settings']['fingerprint']}&pbk={pub_key}&sni={stream_settings['realitySettings']['serverNames'][0]}#{remark}-{remark + '-Email'}"
+            image_path = make_qr_image(conn_str, remark)
+            client.send_photo(callback_query.message.chat.id, image_path, conn_str)
+            return True
+        
+    client.send_message(callback_query.message.chat.id, 'Can not create a v2ray inbound for you!')
