@@ -41,7 +41,7 @@ class XrayService(models.Model):
 
 
     def __str__(self):
-        return self.user.telegram_user_id + '-' + self.server
+        return self.user.telegram_user_id + '-' + self.server.country
 
 
 class XrayPort(models.Model):
