@@ -79,7 +79,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': '/etc/x-ui/x-ui.db',
+        'NAME': 'x-users.db',
     }
 }
 
@@ -129,4 +129,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MAIN_TELEGRAM_CHANNEL = config('MAIN_TELEGRAM_CHANNEL')
 X_UI_URL = 'localhost'
 X_UI_PORT = '5423'
-X_UI_API_URL = X_UI_URL + ':' + X_UI_PORT + 'panel/api/'
+X_UI_API_URL = X_UI_URL + ':' + X_UI_PORT + '/panel/api/'
