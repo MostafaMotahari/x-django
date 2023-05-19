@@ -72,7 +72,7 @@ def free_v2ray(client, callback_query):
 
             models.XrayService.objects.create(
                     user=user, connection_code=conn_str, connection_qr=image_path,
-                    server=server, uuid=uuid, short_uuid=short_uuid)
+                    server=server, uuid=uuid, short_uuid=short_uuid, inbound_id=inbound_json['obj']['id'])
 
             models.XrayPort.objects.create(user=user, server=server, port_number=port)
 

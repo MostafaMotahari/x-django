@@ -3,6 +3,7 @@ from django.db import models
 # Create your models here.
 class XrayUser(models.Model):
     telegram_user_id = models.CharField(max_length=18)
+    donated_amount = models.IntegerField(default=0)
 
     def __str__(self):
         return self.telegram_user_id
@@ -35,6 +36,7 @@ class XrayService(models.Model):
     server = models.OneToOneField(XrayServer, models.SET_NULL, null=True, blank=True)
     uuid = models.CharField(max_length=32, unique=True)
     short_uuid = models.CharField(max_length=32, unique=True)
+    inbound_id = models.IntegerField()
     price = models.IntegerField(default=0)
     connection_code = models.CharField(max_length=526)
     connection_qr = models.CharField(max_length=128)

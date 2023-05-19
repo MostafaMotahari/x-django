@@ -24,6 +24,7 @@ def start(client, message, started=True):
                 reply_markup=ReplyKeyboardMarkup(
                     [
                         [KeyboardButton('Free V2ray')],
+                        [KeyboardButton('Your stats')],
                     ],
                     resize_keyboard=True
                 )
