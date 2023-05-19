@@ -8,14 +8,14 @@ from x_bot.filters.custom_filters import force_join_filter
 
 
 @Client.on_message(filters.private & filters.regex("^Your stats$") & force_join_filter)
-def user_state(client, message):
+def user_stats(client, message):
     user = models.XrayUser.objects.get(telegram_user_id=message.from_user.id)
 
     keyboard = []
     for service in user.current_services.all():
         keyboard.append([InlineKeyboardButton(
             service.server.country + ' ' + str(service.price) + '$',
-            callback_data=f'get_state_{service.pk}'
+            callback_data=f'get_stats_{service.pk}'
         )])
 
     message.reply_text(
@@ -27,8 +27,8 @@ def user_state(client, message):
     )
 
 
-@Client.on_callback_query(filters.regex("^get_state_(.*)$"))
-def service_state(client, callback_query):
+@Client.on_callback_query(filters.regex("^get_stats_(.*)$"))
+def service_stats(client, callback_query):
     service = models.XrayService.objects.get(pk=callback_query.data.split("_")[-1])
 
     login = requests.request("POST", service.server.xui_root_url + '/login', headers={}, data={
