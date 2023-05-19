@@ -42,7 +42,7 @@ def service_stats(client, callback_query):
     inbound_json = response.json()
 
     if inbound_json['success']:
-        client.message.reply_text(
+        callback_query.message.reply_text(
             f"Server name: {service.server.country}\n"
             f"Price: {service.price} USD\n"
             f"Download: {inbound_json['obj']['down']}\n"
