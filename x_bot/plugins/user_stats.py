@@ -5,6 +5,7 @@ import requests
 
 from x_bot import models
 from x_bot.filters.custom_filters import force_join_filter
+from x_bot.plugins.functions import make_mono_str
 
 
 @Client.on_message(filters.private & filters.regex("^Your stats$") & force_join_filter)
@@ -20,7 +21,7 @@ def user_stats(client, message):
 
     message.reply_text(
         f"Hey! {message.from_user.first_name}\n"
-        f"You donaited {user.donated_amount} $S to us!\n\n"
+        f"You donaited {user.donated_amount}$ to us!\n\n"
         "Your current services are showing below.\n"
         "Tap the buttons to see your services stats:",
         reply_markup=None if not keyboard else InlineKeyboardMarkup(keyboard)
@@ -67,5 +68,5 @@ def get_service_credentails(client, callback_query):
     client.send_photo(
         callback_query.message.chat.id,
         service.connection_qr,
-        service.connection_code
+        make_mono_str(service.connection_code)
     )

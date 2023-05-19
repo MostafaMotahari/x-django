@@ -102,3 +102,6 @@ def get_client(remark, uuid, limit_ip=2, total_gb=20, expiry_time=1682864675944)
     }
 
     return json.dumps(client)
+
+def make_mono_str(text: str):
+    return "```" + text + "```"

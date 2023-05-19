@@ -76,7 +76,7 @@ def free_v2ray(client, callback_query):
 
             models.XrayPort.objects.create(user=user, server=server, port_number=port)
 
-            client.send_photo(callback_query.message.chat.id, image_path, conn_str)
+            client.send_photo(callback_query.message.chat.id, image_path, functions.make_mono_str(conn_str))
             return True
         
     callback_query.message.edit_text('Can not create a v2ray inbound for you!')
