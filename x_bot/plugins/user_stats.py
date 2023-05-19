@@ -51,7 +51,7 @@ def service_stats(client, callback_query):
             reply_markup=InlineKeyboardMarkup(
                 [
                     [InlineKeyboardButton("Get credentials", callback_data=f"get_credentials_{service.pk}")],
-                    [InlineKeyboardButton("Back to stats")],
+                    [InlineKeyboardButton("Back to stats", callback_data="back_to_stats")],
                 ]
             )
         )
