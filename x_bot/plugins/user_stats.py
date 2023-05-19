@@ -20,7 +20,7 @@ def user_stats(client, message):
 
     message.reply_text(
         f"Hey! {message.from_user.first_name}\n"
-        f"You donaited {user.donaited_amount} to us!\n\n"
+        f"You donaited {user.donated_amount} to us!\n\n"
         "Your current services are showing below.\n"
         "Tap the buttons to see your services stats:",
         reply_markup=InlineKeyboardMarkup(keyboard)
