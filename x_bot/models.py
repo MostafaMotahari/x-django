@@ -33,7 +33,7 @@ class XrayServer(models.Model):
 
 class XrayService(models.Model):
     user = models.ForeignKey(XrayUser, models.CASCADE, 'current_services')
-    server = models.OneToOneField(XrayServer, models.SET_NULL, null=True, blank=True)
+    server = models.ForeignKey(XrayServer, models.SET_NULL, 'services', null=True, blank=True)
     uuid = models.CharField(max_length=32, unique=True)
     short_uuid = models.CharField(max_length=32, unique=True)
     inbound_id = models.IntegerField()
