@@ -23,7 +23,7 @@ def user_stats(client, message):
         f"You donaited {user.donated_amount} $S to us!\n\n"
         "Your current services are showing below.\n"
         "Tap the buttons to see your services stats:",
-        reply_markup=InlineKeyboardMarkup(keyboard)
+        reply_markup=None if not keyboard else InlineKeyboardMarkup(keyboard)
     )
 
 

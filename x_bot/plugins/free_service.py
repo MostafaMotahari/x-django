@@ -16,7 +16,7 @@ def free_v2ray(client, callback_query):
 
     try:
         current_service = models.XrayService.objects.get(user=user, price=0)
-        client.send_message(callback_query.message.chat.id, 'You currently have a free service!')
+        callback_query.message.edit_text('You currently have a free service!')
         return False
 
     except models.XrayService.DoesNotExist:
@@ -79,4 +79,4 @@ def free_v2ray(client, callback_query):
             client.send_photo(callback_query.message.chat.id, image_path, conn_str)
             return True
         
-    client.send_message(callback_query.message.chat.id, 'Can not create a v2ray inbound for you!')
+    callback_query.message.edit_text('Can not create a v2ray inbound for you!')
