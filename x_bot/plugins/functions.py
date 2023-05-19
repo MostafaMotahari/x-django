@@ -1,6 +1,6 @@
 import subprocess
 import qrcode
-import shortuuid
+import random
 import json
 
 from x_bot.models import XrayService, XrayPort
@@ -16,7 +16,7 @@ def get_uuid():
             break
 
     while True:
-        short_uuid = shortuuid.uuid()
+        short_uuid = ''.join(random.choices('0123456789abcdef', k=6))
         try:
             XrayService.objects.get(short_uuid=short_uuid)
             continue
@@ -29,8 +29,8 @@ def get_keys():
     result = subprocess.run(['xray', 'x25519'], stdout=subprocess.PIPE)
     result = result.stdout.decode('utf-8')
     key_lines = result.split('\n')
-    public_key = key_lines[0].split(":")[1].strip()
-    private_key = key_lines[1].split(":")[1].strip()
+    private_key = key_lines[0].split(":")[1].strip()
+    public_key = key_lines[1].split(":")[1].strip()
 
     return (public_key, private_key)
 
