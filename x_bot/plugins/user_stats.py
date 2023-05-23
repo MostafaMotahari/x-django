@@ -68,5 +68,5 @@ def get_service_credentails(client, callback_query):
     client.send_photo(
         callback_query.message.chat.id,
         service.connection_qr,
-        make_mono_str(service.connection_code)
+        service.connection_code
     )
