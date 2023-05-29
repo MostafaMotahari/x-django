@@ -22,8 +22,8 @@ def free_v2ray(client, callback_query):
     except models.XrayService.DoesNotExist:
         pass
 
-    service = models.XrayService(user=user)
-    if service.save(server.inbounds.first()):
+    service = models.XrayService(user=user, inbound=server.inbounds.first())
+    if service.save():
         client.send_photo(callback_query.message.chat.id, service.image_path, service.conn_str)
         return True
     callback_query.message.edit_text('Can not create a v2ray inbound for you!')
