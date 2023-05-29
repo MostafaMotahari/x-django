@@ -19,9 +19,9 @@ class XrayInboundAdmin(admin.ModelAdmin):
 
 @admin.register(models.XrayService)
 class XrayServiceAdmin(admin.ModelAdmin):
-    list_display = ('user', 'inbound', 'price')
+    list_display = ('user', 'price')
 
 
 @admin.register(models.XrayPort)
 class XrayPortAdmin(admin.ModelAdmin):
-    list_display = ('inbound', 'port_number')
+    list_display = ('port_number', )
