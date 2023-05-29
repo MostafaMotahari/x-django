@@ -9,14 +9,14 @@ class XrayUserAdmin(admin.ModelAdmin):
 
 @admin.register(models.XrayServer)
 class XrayServerAdmin(admin.ModelAdmin):
-    list_display = ('country', 'is_active', 'capacity', 'domain')
+    list_display = ('country', 'capacity', 'domain')
 
 
 @admin.register(models.XrayService)
 class XrayServiceAdmin(admin.ModelAdmin):
-    list_display = ('user', 'inbound__server', 'inbound', 'price')
+    list_display = ('user', 'inbound', 'price', 'is_active')
 
 
 @admin.register(models.XrayPort)
 class XrayPortAdmin(admin.ModelAdmin):
-    list_display = ('xrayinbound__server', 'port_number')
+    list_display = ('inbound', 'port_number')

@@ -61,7 +61,7 @@ class XrayInbound(models.Model):
     inbound_id = models.IntegerField(help_text='Dont fill this field! it will be filled automatically.')
     remark = models.CharField(max_length=36)
     protocol = models.CharField(max_length=8, choices=Protocol.choices)
-    port = models.OneToOneField(XrayPort, models.PROTECT, help_text='Dont fill this field! it will be filled automatically.')
+    port = models.OneToOneField(XrayPort, models.PROTECT, 'inbound', help_text='Dont fill this field! it will be filled automatically.')
     total_flow = models.IntegerField(null=True, blank=True)
     expire_date = models.DateField(null=True, blank=True)
     transmission = models.CharField(max_length=8, choices=Transmission.choices)
