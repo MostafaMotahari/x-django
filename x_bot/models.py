@@ -140,7 +140,6 @@ class XrayService(models.Model):
             "password": self.inbound.server.xui_password
         })
 
-        self.inbound = inbound
         uuid, short_uuid = functions.get_uuid()
         client_payload = {
             'id': self.inbound.inbound_id,
