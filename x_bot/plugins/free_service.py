@@ -22,40 +22,6 @@ def free_v2ray(client, callback_query):
     except models.XrayService.DoesNotExist:
         pass
 
-    login = requests.request("POST", server.xui_root_url + '/login', headers={}, data={
-        "username": server.xui_username,
-        "password": server.xui_password
-    })
-
-    remark = str(callback_query.from_user.id) + '-' + server.country
-    uuid, short_uuid = functions.get_uuid()
-    pub_key, pri_key = functions.get_keys()
-    port = functions.get_port()
-
-    payload = {
-        "enable": True,
-        "remark": remark,
-        "listen": '',
-        "port": port,
-        "protocol": "vless",
-        "expiryTime": 0,
-        "settings": json.dumps({
-            "clients": [],
-            "decryption": "none",
-            "fallbacks": []
-        }),
-        "streamSettings": functions.get_stream_settings(pub_key, pri_key, short_uuid, server.sni),
-        "sniffing": json.dumps({
-            "enabled": True,
-            "destOverride": ["http","tls","quic"]
-        })
-    }
-    headers = {'Accept': 'application/json'}
-
-    response = requests.request("POST", server.xui_api_url + 'inbounds/add',
-                                headers=headers, data=payload, cookies=login.cookies)
-    inbound_json = response.json()
-
     if inbound_json['success']:
         client_payload = {
             'id': inbound_json['obj']['id'],
