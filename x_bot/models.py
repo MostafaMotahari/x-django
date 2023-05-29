@@ -68,12 +68,15 @@ class XrayInbound(models.Model):
     is_active = models.BooleanField(default=True)
     security = models.CharField(max_length=8, choices=Security.choices)
     sni = models.CharField(max_length=32)
-    security = models.CharField(max_length=8, choices=UTLS.choices)
+    utls = models.CharField(max_length=8, choices=UTLS.choices)
     short_uuid = models.CharField(max_length=32, unique=True, help_text='Dont fill this field! it will be filled automatically.')
     private_key = models.CharField(max_length=46, help_text='Dont fill this field! it will be filled automatically.')
     public_key = models.CharField(max_length=46, help_text='Dont fill this field! it will be filled automatically.')
 
     capacity = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return self.protocol + ' - ' + self.security + ' - ' + self.utls
 
     def save(self, *args, **kwargs):
         login = requests.request("POST", self.server.xui_root_url + '/login', headers={}, data={
