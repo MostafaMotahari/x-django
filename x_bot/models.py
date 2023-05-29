@@ -37,6 +37,9 @@ class XrayServer(models.Model):
 class XrayPort(models.Model):
     port_number = models.PositiveIntegerField()
 
+    def __str__(self):
+        return self.port_number
+
 
 class XrayInbound(models.Model):
     class Protocol(models.TextChoices):
@@ -64,7 +67,7 @@ class XrayInbound(models.Model):
     port = models.OneToOneField(XrayPort, models.PROTECT, related_name='inbound', help_text='Dont fill this field! it will be filled automatically.')
     total_flow = models.IntegerField(null=True, blank=True)
     expire_date = models.DateField(null=True, blank=True)
-    transmission = models.CharField(max_length=8, choices=Transmission.choices)
+    transmission = models.CharField(max_length=8, choices=Transmission.choices, default=Transmission.TCP)
     is_active = models.BooleanField(default=True)
     security = models.CharField(max_length=8, choices=Security.choices)
     sni = models.CharField(max_length=32)
