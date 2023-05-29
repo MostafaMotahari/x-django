@@ -78,12 +78,7 @@ class XrayInbound(models.Model):
     def __str__(self):
         return self.protocol + ' - ' + self.security + ' - ' + self.utls
 
-    def save(self, *args, **kwargs):
-        login = requests.request("POST", self.server.xui_root_url + '/login', headers={}, data={
-            "username": self.server.xui_username,
-            "password": self.server.xui_password
-        })
-
+    def create(self, login_cookies, *args, **kwargs):
         uuid, short_uuid = functions.get_uuid()
         pub_key, pri_key = functions.get_keys()
         port = functions.get_port()
@@ -109,7 +104,7 @@ class XrayInbound(models.Model):
         headers = {'Accept': 'application/json'}
 
         response = requests.request("POST", self.server.xui_api_url + 'inbounds/add',
-                                    headers=headers, data=payload, cookies=login.cookies)
+                                    headers=headers, data=payload, cookies=login_cookies)
         inbound_json = response.json()
 
         if inbound_json['success']:
@@ -119,6 +114,12 @@ class XrayInbound(models.Model):
             self.port = XrayPort.objects.create(port_number=port)
 
             super(XrayInbound, self).save(*args, **kwargs)
+            return True
+        return False
+
+    def save(self, *args, **kwargs):
+        if login_cookies := functions.get_login_cookie(self.server):
+            self.create(login_cookies)
             return True
         return False
 
@@ -135,10 +136,8 @@ class XrayService(models.Model):
         return self.user.telegram_user_id + '-' + self.server.country
 
     def save(self, *args, **kwargs):
-        login = requests.request("POST", self.inbound.server.xui_root_url + '/login', headers={}, data={
-            "username": self.inbound.server.xui_username,
-            "password": self.inbound.server.xui_password
-        })
+        if not (login_cookies := functions.get_login_cookie(self.inbound.server)):
+            return False
 
         uuid, short_uuid = functions.get_uuid()
         client_payload = {
@@ -148,7 +147,7 @@ class XrayService(models.Model):
 
         headers = {'Accept': 'application/json'}
         response = requests.request("POST", self.inbound.server.xui_api_url + 'inbounds/addClient',
-                                    headers=headers, data=client_payload, cookies=login.cookies)
+                                    headers=headers, data=client_payload, cookies=login_cookies)
         json_response = response.json()
 
         if json_response['success']:

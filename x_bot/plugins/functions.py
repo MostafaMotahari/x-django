@@ -1,9 +1,20 @@
 import subprocess
+import requests
 import qrcode
 import random
 import json
 
 from x_bot import models
+
+def get_login_cookie(server):
+    login = requests.request("POST", server.xui_root_url + '/login', headers={}, data={
+        "username": server.xui_username,
+        "password": server.xui_password
+    })
+
+    if login.json()['success']:
+        return login.cookies
+    return False
 
 def get_uuid():
     while True:
