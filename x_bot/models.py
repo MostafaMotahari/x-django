@@ -116,6 +116,8 @@ class XrayInbound(models.Model):
             self.port = XrayPort.objects.create(port_number=port)
 
             super(XrayInbound, self).save(*args, **kwargs)
+            return True
+        return False
 
 
 class XrayService(models.Model):
@@ -129,12 +131,13 @@ class XrayService(models.Model):
     def __str__(self):
         return self.user.telegram_user_id + '-' + self.server.country
 
-    def save(self, *args, **kwargs):
+    def save(self, inbound, *args, **kwargs):
         login = requests.request("POST", self.inbound.server.xui_root_url + '/login', headers={}, data={
             "username": self.inbound.server.xui_username,
             "password": self.inbound.server.xui_password
         })
 
+        self.inbound = inbound
         uuid, short_uuid = functions.get_uuid()
         client_payload = {
             'id': self.inbound.inbound_id,

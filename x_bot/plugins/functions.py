@@ -3,24 +3,24 @@ import qrcode
 import random
 import json
 
-from x_bot.models import XrayService, XrayPort
+from x_bot import models
 
 def get_uuid():
     while True:
         result = subprocess.run(['xray', 'uuid'], stdout=subprocess.PIPE)
         result = result.stdout.decode('utf-8').strip()
         try:
-            XrayService.objects.get(uuid=result)
+            models.XrayService.objects.get(uuid=result)
             continue
-        except XrayService.DoesNotExist:
+        except models.XrayService.DoesNotExist:
             break
 
     while True:
         short_uuid = ''.join(random.choices('0123456789abcdef', k=6))
         try:
-            XrayService.objects.get(short_uuid=short_uuid)
+            models.XrayService.objects.get(short_uuid=short_uuid)
             continue
-        except XrayService.DoesNotExist:
+        except models.XrayService.DoesNotExist:
             break
 
     return (result, short_uuid)
@@ -52,9 +52,9 @@ def get_port():
     port = None
     for port in range(10000, 12000):
         try:
-            XrayPort.objects.get(port_number=port)
+            models.XrayPort.objects.get(port_number=port)
             continue
-        except XrayPort.DoesNotExist:
+        except models.XrayPort.DoesNotExist:
             return port
 
 def get_stream_settings(pub_key, pri_key, short_uuid, server_name):
