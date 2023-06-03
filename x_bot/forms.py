@@ -6,6 +6,14 @@ import json
 
 
 class XrayInboundAdminForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['inbound_id'].required = False
+        self.fields['port'].required = False
+        self.fields['short_uuid'].required = False
+        self.fields['private_key'].required = False
+        self.fields['public_key'].required = False
+
     class Meta:
         model = models.XrayInbound
         fields = ('__all__')
@@ -45,7 +53,6 @@ class XrayInboundAdminForm(forms.ModelForm):
             self.cleaned_data['inbound_id'] = inbound_json['obj']['id']
             self.cleaned_data['port'] = models.XrayPort.objects.create(port_number=port)
 
-            super(XrayInboundAdminForm, self).save(commit=True)
             return True
         return False
 
