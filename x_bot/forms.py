@@ -27,7 +27,7 @@ class XrayInboundAdminForm(forms.ModelForm):
                 "decryption": "none",
                 "fallbacks": []
             }),
-            "streamSettings": functions.get_stream_settings(pub_key, pri_key, short_uuid, self.cleaned_data['server'].sni),
+            "streamSettings": functions.get_stream_settings(pub_key, pri_key, short_uuid, self.cleaned_data['sni']),
             "sniffing": json.dumps({
                 "enabled": True,
                 "destOverride": ["http","tls","quic"]
