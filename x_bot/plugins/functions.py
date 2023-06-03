@@ -29,9 +29,9 @@ def get_uuid():
     while True:
         short_uuid = ''.join(random.choices('0123456789abcdef', k=6))
         try:
-            models.XrayService.objects.get(short_uuid=short_uuid)
+            models.XrayInbound.objects.get(short_uuid=short_uuid)
             continue
-        except models.XrayService.DoesNotExist:
+        except models.XrayInbound.DoesNotExist:
             break
 
     return (result, short_uuid)
