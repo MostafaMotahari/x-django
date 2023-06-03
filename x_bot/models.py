@@ -38,7 +38,7 @@ class XrayPort(models.Model):
     port_number = models.PositiveIntegerField()
 
     def __str__(self):
-        return self.port_number
+        return str(self.port_number)
 
 
 class XrayInbound(models.Model):
@@ -80,51 +80,6 @@ class XrayInbound(models.Model):
 
     def __str__(self):
         return self.protocol + ' - ' + self.security + ' - ' + self.utls
-
-    def create(self, login_cookies, *args, **kwargs):
-        uuid, short_uuid = functions.get_uuid()
-        pub_key, pri_key = functions.get_keys()
-        port = functions.get_port()
-
-        payload = {
-            "enable": True,
-            "remark": self.remark,
-            "listen": '',
-            "port": port,
-            "protocol": self.protocol,
-            "expiryTime": 0,
-            "settings": json.dumps({
-                "clients": [],
-                "decryption": "none",
-                "fallbacks": []
-            }),
-            "streamSettings": functions.get_stream_settings(pub_key, pri_key, short_uuid, self.server.sni),
-            "sniffing": json.dumps({
-                "enabled": True,
-                "destOverride": ["http","tls","quic"]
-            })
-        }
-        headers = {'Accept': 'application/json'}
-
-        response = requests.request("POST", self.server.xui_api_url + 'inbounds/add',
-                                    headers=headers, data=payload, cookies=login_cookies)
-        inbound_json = response.json()
-
-        if inbound_json['success']:
-            self.short_uuid = short_uuid
-            self.private_key, self.public_key = pri_key, pub_key
-            self.inbound_id = inbound_json['obj']['id']
-            self.port = XrayPort.objects.create(port_number=port)
-
-            super(XrayInbound, self).save(*args, **kwargs)
-            return True
-        return False
-
-    def save(self, *args, **kwargs):
-        if login_cookies := functions.get_login_cookie(self.server):
-            self.create(login_cookies)
-            return True
-        return False
 
 
 class XrayService(models.Model):

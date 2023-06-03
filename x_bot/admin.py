@@ -1,5 +1,6 @@
 from django.contrib import admin
 from . import models
+from . import forms
 
 # Register your models here.
 @admin.register(models.XrayUser)
@@ -14,6 +15,7 @@ class XrayServerAdmin(admin.ModelAdmin):
 
 @admin.register(models.XrayInbound)
 class XrayInboundAdmin(admin.ModelAdmin):
+    form = forms.XrayInboundAdminForm
     list_display = ('server', 'capacity', 'is_active')
 
 
